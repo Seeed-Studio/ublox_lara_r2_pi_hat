@@ -1,2 +1,2 @@
-# Ublox_LARA_R2_Pi_Hat
-Python script for Raspberry pi hat using #ublox lara r2# LTE module.
+# LTE_Pi_Hat_ublox_lara_r2_python_module
+
