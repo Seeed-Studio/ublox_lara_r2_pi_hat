@@ -103,7 +103,7 @@ class Ublox_lara_r2():
 
     def reset_power(self):
         self.debug = False
-        print "waking...",
+        print "waking up...",
         if not self.sendAT("AT\r\n", "OK\r\n"):
             self.pwr_key_trigger()            
             while not ublox.sendAT("AT\r\n", 'OK\r\n'):
