@@ -12,15 +12,15 @@ git clone https://github.com/Seeed-Studio/ublox_lara_r2_pi_hat
 sudo python setup.py install
 ```
 
-### Run examples
+### Run test code
 ```
-cd examples
-sudo python example01.py
+cd test
+sudo python test01.py
 ```
 
 - Command line shows
 ```
-pi@raspberrypi:~/Desktop/Ublox_LARA_R2_Pi_Hat/examples $ sudo python example01.py
+pi@raspberrypi:~/Desktop/Ublox_LARA_R2_Pi_Hat/examples $ sudo python test01.py
 40-pin GPIO header detected
 Enabling CTS0 and RTS0 on GPIOs 16 and 17
 rts cts on
