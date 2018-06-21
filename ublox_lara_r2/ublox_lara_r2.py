@@ -45,14 +45,9 @@ class Ublox_lara_r2():
         if self.debug:
             print("rts cts off")
 
-    def power_on(self):
+    def pwr_key_trigger(self):
         GPIO.output(self.power_pin, True)
         time.sleep(1.0)
-        GPIO.output(self.power_pin, False)
-
-    def power_off(self):
-        GPIO.output(self.power_pin, True)
-        time.sleep(1.2)
         GPIO.output(self.power_pin, False)
 
     def handle_receive(self):        
@@ -71,7 +66,7 @@ class Ublox_lara_r2():
         self.response = ""
         self.comm.write(cmd)
         if self.debug:        
-            print("> " + cmd)
+            print "\r\n>" + cmd
         
 
     def sendAT(self, cmd, response = None, timeout=1):        
@@ -81,7 +76,7 @@ class Ublox_lara_r2():
         while not self.cmd_done and attempts >= 0:            
             self.comm.write(cmd)
             if self.debug:
-                print '>'+cmd,
+                print '\r\n>'+cmd,
             time.sleep(0.5)
             if None != response:            
                 if self.response.find(response)>=0:
@@ -106,20 +101,13 @@ class Ublox_lara_r2():
                     break
         return rssi
 
-if __name__ == "__main__":
-    ublox = Ublox_lara_r2()
-    # ublox.debug = True
-    ublox.initialize()    
-
-    if not ublox.sendAT("AT\r\n", "OK\r\n"):
-        ublox.power_on()
-        while not ublox.sendAT("AT\r\n", 'OK\r\n'):
-            print('waking...')
-
-    print 'Signal RSSI: ' + ublox.getRSSI()
-    ublox.sendAT("AT+CFUN?\r\n", 'OK\r\n')
-    print ublox.response    
-   
-    ublox.sendAT("AT+CGMM\r\n", 'OK')
-    print ublox.response
+    def reset_power(self):
+        self.debug = False
+        print "waking...",
+        if not self.sendAT("AT\r\n", "OK\r\n"):
+            self.pwr_key_trigger()            
+            while not ublox.sendAT("AT\r\n", 'OK\r\n'):
+                print '.',
+            print '\r\n'
+        self.debug = True
 
