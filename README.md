@@ -20,7 +20,7 @@ sudo python test01.py
 
 - Command line shows
 ```
-pi@raspberrypi:~/Desktop/Ublox_LARA_R2_Pi_Hat/examples $ sudo python test01.py
+pi@raspberrypi:~/Desktop/ublox_lara_r2_pi_hat/examples $ sudo python test01.py
 40-pin GPIO header detected
 Enabling CTS0 and RTS0 on GPIOs 16 and 17
 rts cts on
