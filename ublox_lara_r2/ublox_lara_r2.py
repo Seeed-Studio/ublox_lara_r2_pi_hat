@@ -6,16 +6,16 @@ import serial
 import time
 import RPi.GPIO as GPIO
 
-class ublox_lara_r2():
-    def __init__(self):
+class Ublox_lara_r2():
+    def __init__(self, port = "/dev/ttyAMA0", baudrate = 115200):
         self.cmd_done = False
         self.power_pin = 29
         self.reset_pin = 31
         self.keep_receive_alive = True        
-        self.debug = False
-        self.recv_buffer = ""
+        self.debug = True
+        self.response = ""
 
-        self.comm = serial.Serial("/dev/ttyAMA0", 115200)
+        self.comm = serial.Serial(port, baudrate)
    
     def __del__(self):
         self.disabel_rtscts()
@@ -59,7 +59,7 @@ class ublox_lara_r2():
         while True == self.keep_receive_alive:                     
             if self.comm.readable():                
                 line = self.comm.readline()
-                self.recv_buffer += line
+                self.response += line
                 if self.debug:
                     print '<'+line,
 
@@ -68,7 +68,7 @@ class ublox_lara_r2():
     
     # def 
     def send(self, cmd):        
-        self.recv_buffer = ""
+        self.response = ""
         self.comm.write(cmd)
         if self.debug:        
             print("> " + cmd)
@@ -76,7 +76,7 @@ class ublox_lara_r2():
 
     def sendAT(self, cmd, response = None, timeout=1):        
         self.cmd_done=False
-        self.recv_buffer = ""
+        self.response = ""
         attempts = timeout 
         while not self.cmd_done and attempts >= 0:            
             self.comm.write(cmd)
@@ -84,7 +84,7 @@ class ublox_lara_r2():
                 print '>'+cmd,
             time.sleep(0.5)
             if None != response:            
-                if self.recv_buffer.find(response)>=0:
+                if self.response.find(response)>=0:
                     self.cmd_done = True
             elif None == response:
                 self.cmd_done = True
@@ -93,11 +93,11 @@ class ublox_lara_r2():
 
         return (attempts >= 0)
 
-    def getSignalRSSI(self):
+    def getRSSI(self):
         rssi = ""
         self.sendAT("AT+CSQ\r\n", 'OK\r\n')
-        if self.recv_buffer != "":
-            parts = self.recv_buffer.split('\r\n')
+        if self.response != "":
+            parts = self.response.split('\r\n')
             # print parts
             for part in parts:
                 parse_index = part.find('+CSQ: ')
@@ -107,8 +107,8 @@ class ublox_lara_r2():
         return rssi
 
 if __name__ == "__main__":
-    ublox = ublox_lara_r2()
-    ublox.debug = True
+    ublox = Ublox_lara_r2()
+    # ublox.debug = True
     ublox.initialize()    
 
     if not ublox.sendAT("AT\r\n", "OK\r\n"):
@@ -116,10 +116,10 @@ if __name__ == "__main__":
         while not ublox.sendAT("AT\r\n", 'OK\r\n'):
             print('waking...')
 
-    print 'Signal RSSI: ' + ublox.getSignalRSSI()
+    print 'Signal RSSI: ' + ublox.getRSSI()
     ublox.sendAT("AT+CFUN?\r\n", 'OK\r\n')
-    # print ublox.recv_buffer    
+    print ublox.response    
    
     ublox.sendAT("AT+CGMM\r\n", 'OK')
-    # print ublox.recv_buffer
+    print ublox.response
 
