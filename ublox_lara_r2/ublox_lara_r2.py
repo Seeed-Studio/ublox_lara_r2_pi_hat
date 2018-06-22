@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import os
+import os, sys
 import thread
 import serial
 import time
@@ -104,10 +104,12 @@ class Ublox_lara_r2():
     def reset_power(self):
         self.debug = False
         print "waking up...",
+        sys.stdout.flush()
         if not self.sendAT("AT\r\n", "OK\r\n"):
             self.pwr_key_trigger()            
-            while not ublox.sendAT("AT\r\n", 'OK\r\n'):
-                print '.',
+            while not self.sendAT("AT\r\n", 'OK\r\n'):
+                print '...',
+                sys.stdout.flush()
             print '\r\n'
         self.debug = True
 
