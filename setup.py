@@ -1,17 +1,19 @@
 #!/usr/bin/env python
 
+
 try:
     from setuptools import setup, find_packages
 except ImportError:
-	from distutils.core import setup
+    from distutils.core import setup
 
 with open('package_description.rst', 'r') as f:
-	long_description = f.read()
+    long_description = f.read()
 
+requirements=['pySerial']
 
 setup(
       name='ublox-lara-r2',
-      version='0.0.5',
+      version='0.0.1',
       packages = find_packages(),
       description='LTE Pi Hat driver using celluar module ublox lara r2 LTE Cat.1.',
       long_description=long_description,
@@ -27,4 +29,5 @@ setup(
           "Operating System :: POSIX :: Linux",
       ),
       keywords=['ublox lara r2', 'ublox', 'R211', 'R204', 'LTE', 'Cat.1'],
+      install_requires=requirements
      )
