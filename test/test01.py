@@ -12,7 +12,7 @@ if u.sendAT("AT+CGMM\r\n", "OK\r\n"):
     print "\r\nmodule name: ", u.response.split('\r\n')[1]
 
 # get SIM card state
-if u.sendAT("AT+CSIM?\r\n", "OK\r\n"):
+if u.sendAT("AT+CPIN?\r\n", "OK\r\n"):
     print "\r\nSIM state: ", u.response.split('\r\n')[1]
 
 # check rssi
